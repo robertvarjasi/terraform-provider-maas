@@ -11,6 +11,8 @@ require (
 	github.com/stretchr/testify v1.8.3
 )
 
+replace github.com/maas/gomaasclient => github.com/robertvarjasi/gomaasclient v0.0.0-20230629121127-b05d5648f025
+
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
