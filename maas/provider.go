@@ -46,6 +46,7 @@ func Provider() *schema.Provider {
 			"maas_dns_record":                 resourceMaasDnsRecord(),
 			"maas_space":                      resourceMaasSpace(),
 			"maas_block_device":               resourceMaasBlockDevice(),
+			"maas_raid":                       resourceMaasRaid(),
 			"maas_tag":                        resourceMaasTag(),
 			"maas_user":                       resourceMaasUser(),
 		},

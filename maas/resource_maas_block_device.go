@@ -386,7 +386,7 @@ func updateBlockDevicePartitions(client *client.Client, d *schema.ResourceData, 
 				return err
 			}
 		}
-		if fsType := partition["fs_type"].(string); fsType != "" {
+		if fsType := partition["fs_type"].(string); fsType != "" && fsType != "raid" {
 			label := partition["label"].(string)
 			if _, err := client.BlockDevicePartition.Format(blockDevice.SystemID, blockDevice.ID, blockDevicePartition.ID, fsType, label); err != nil {
 				return err
