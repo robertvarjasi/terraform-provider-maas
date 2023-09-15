@@ -40,10 +40,12 @@ func resourceMaasNetworkInterfaceLink() *schema.Resource {
 		                  if link.Subnet.ID == subnet.ID {
 			        // Save the resource
 			         	tfState := map[string]interface{}{
-					"id":              fmt.Sprintf("%v", link.ID),
-				        "subnet":          strconv.Itoa(link.Subnet.ID),
-		                        "mode":            link.Mode,
-		                        "ip_address":      link.IPAddress,
+					"id":                fmt.Sprintf("%v", link.ID),
+				        "subnet":            strconv.Itoa(link.Subnet.ID),
+		                        "mode":              link.Mode,
+		                        "ip_address":        link.IPAddress,
+					"machine":           idParts[0],
+					"network_interface": idParts[1],
 				        }
 					if err := setTerraformState(d, tfState); err != nil {
 					    return nil, err
