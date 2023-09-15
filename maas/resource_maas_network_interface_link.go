@@ -19,6 +19,40 @@ func resourceMaasNetworkInterfaceLink() *schema.Resource {
 		ReadContext:   resourceNetworkInterfaceLinkRead,
 		UpdateContext: resourceNetworkInterfaceLinkUpdate,
 		DeleteContext: resourceNetworkInterfaceLinkDelete,
+		Importer: &schema.ResourceImporter{
+			StateContext: func(ctx context.Context, d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
+				idParts := strings.Split(d.Id(), ":")
+				if len(idParts) != 3 || idParts[0] == "" || idParts[1] == "" || idParts[2] == "" {
+					return nil, fmt.Errorf("unexpected format of ID (%q), expected MACHINE:NETWORK_INTERFACE:CIDR", d.Id())
+				}
+				client := m.(*client.Client)
+				subnet, err := getSubnet(client, idParts[2])
+				if err != nil {
+					return nil, err
+				}
+				networkInterface, err := getNetworkInterface(client, idParts[0], idParts[1])
+				if err != nil {
+					return nil, err
+				}
+				//find netlink
+	                        for _, link := range networkInterface.Links {
+		                  if link.Subnet.ID == subnet.ID {
+			        // Save the resource
+			         	tfState := map[string]interface{}{
+					"id":              fmt.Sprintf("%v", link.ID),
+				        "subnet":          link.Subnet,
+		                        "mode":            link.Mode,
+		                        "ip_address":      link.IPAddress,
+				        }
+		                   }
+	                        }
+			
+				if err := setTerraformState(d, tfState); err != nil {
+					return nil, err
+				}
+				return []*schema.ResourceData{d}, nil
+			},
+		},
 
 		Schema: map[string]*schema.Schema{
 			"machine": {
