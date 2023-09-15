@@ -41,7 +41,7 @@ func resourceMaasNetworkInterfaceLink() *schema.Resource {
 			        // Save the resource
 			         	tfState := map[string]interface{}{
 					"id":              fmt.Sprintf("%v", link.ID),
-				        "subnet":          link.Subnet,
+				        "subnet":          link.subnet.ID,
 		                        "mode":            link.Mode,
 		                        "ip_address":      link.IPAddress,
 				        }
