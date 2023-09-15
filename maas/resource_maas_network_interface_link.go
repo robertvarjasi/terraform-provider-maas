@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -44,12 +45,11 @@ func resourceMaasNetworkInterfaceLink() *schema.Resource {
 		                        "mode":            link.Mode,
 		                        "ip_address":      link.IPAddress,
 				        }
+					if err := setTerraformState(d, tfState); err != nil {
+					    return nil, err
+				        }
 		                   }
 	                        }
-			
-				if err := setTerraformState(d, tfState); err != nil {
-					return nil, err
-				}
 				return []*schema.ResourceData{d}, nil
 			},
 		},
